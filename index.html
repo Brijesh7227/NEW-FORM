@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nirmal Poly Plast Application Form</title>
+<style>
+    /* ==========================================
+       1. WEB FORM STYLES (Screen View)
+       ========================================== */
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #eef2f7;
+        color: #333;
+        margin: 0;
+        padding: 20px;
+    }
+    .form-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #fff;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    .company-header {
+        text-align: center;
+        margin-bottom: 25px;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 15px;
+    }
+    .company-header h1 { color: #1a252f; margin: 0; font-size: 28px; text-transform: uppercase; }
+    .company-header h3 { color: #2980b9; margin: 5px 0 0 0; font-size: 18px; }
+    .company-header p { color: #7f8c8d; margin: 5px 0 0 0; font-size: 14px; }
+    
+    .section-title {
+        grid-column: span 12;
+        font-size: 15px;
+        color: #fff;
+        background-color: #2c3e50;
+        padding: 10px 15px;
+        margin-top: 25px;
+        border-radius: 4px;
+        text-transform: uppercase;
+        font-weight: bold;
+    }
+    
+    /* 12-Column Grid System */
+    .grid-layout { display: grid; grid-template-columns: repeat(12, 1fr); gap: 15px; }
+    .col-2 { grid-column: span 2; }
+    .col-3 { grid-column: span 3; }
+    .col-4 { grid-column: span 4; }
+    .col-6 { grid-column: span 6; }
+    .col-8 { grid-column: span 8; }
+    .col-12 { grid-column: span 12; }
+    
+    .form-group { display: flex; flex-direction: column; }
+    label { font-weight: 600; margin-bottom: 6px; color: #444; font-size: 12px; }
+    input[type="text"], input[type="email"], input[type="tel"], input[type="date"], select, textarea {
+        padding: 9px; border: 1px solid #ccd1d9; border-radius: 4px; font-size: 13px; font-family: inherit; width: 100%; box-sizing: border-box;
+    }
+    input:focus, select:focus, textarea:focus { border-color: #3498db; outline: none; box-shadow: 0 0 5px rgba(52,152,219,0.2); }
+    
+    /* Tables */
+    .input-table { width: 100%; border-collapse: collapse; margin-top: 5px; }
+    .input-table th, .input-table td { padding: 6px 4px; text-align: left; }
+    .input-table th { background: #f4f6f9; font-size: 12px; color: #555; border: 1px solid #ccc;}
+    .input-table td { border: 1px solid #eee; }
+    .input-table input, .input-table select { padding: 6px; width: 100%; }
+
+    button.submit-btn {
+        background-color: #27ae60; color: white; padding: 16px 20px; border: none; border-radius: 4px;
+        cursor: pointer; font-size: 16px; font-weight: bold; width: 100%; margin-top: 40px; text-transform: uppercase;
+        transition: background 0.3s;
+    }
+    button.submit-btn:hover { background-color: #219150; }
+    
+    #photoPreview { max-width: 100px; margin-top: 10px; display: none; border: 1px solid #ddd; }
+    .age-badge { color: #27ae60; font-weight: bold; margin-left: 5px; font-size: 11px;}
+
+    /* ==========================================
+       RESPONSIVE DESIGN (Tablets & Mobile)
+       ========================================== */
+    
+    /* Tablet View */
+    @media (max-width: 900px) {
+        .col-2, .col-3, .col-4 {
+            grid-column: span 6;
+        }
+    }
+
+    /* Mobile View */
+    @media (max-width: 600px) {
+        .col-2, .col-3, .col-4, .col-6, .col-8 {
+            grid-column: span 12; 
+        }
+        
+        .form-container {
+            padding: 20px 15px;
+        }
+
+        .input-table {
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+    }
+
+    /* ==========================================
+       2. A4 PDF OUTPUT STYLES (Print View)
+       ========================================== */
+    #a4-output {
+        display: none; 
+        width: 210mm;
+        padding: 10mm 12mm;
+        margin: 0 auto;
+        background: white;
+        box-sizing: border-box;
+        font-size: 10px; 
+        color: #000;
+        font-family: Arial, sans-serif;
+    }
+    .doc-header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 5px; margin-bottom: 10px; }
+    .doc-header h1 { margin: 0; font-size: 20px; text-transform: uppercase;}
+    .doc-header h2 { margin: 3px 0; font-size: 14px; }
+    .doc-header p { margin: 0; font-size: 10px; font-weight: bold;}
+    
+    .profile-section { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+    .applicant-basic-info h2 { margin: 0 0 4px 0; font-size: 16px; text-transform: uppercase; }
+    .applicant-basic-info p { margin: 2px 0; }
+    .profile-section img { width: 90px; height: 115px; object-fit: cover; border: 1px solid #000; }
+    
+    .print-section { margin-bottom: 10px; page-break-inside: avoid; }
+    .section-heading { background-color: #e0e0e0; border: 1px solid #000; font-weight: bold; padding: 4px 6px; margin: 0; font-size: 11px; text-transform: uppercase; }
+    
+    .data-table { width: 100%; border-collapse: collapse; margin-bottom: 0; }
+    .data-table th, .data-table td { padding: 4px; border: 1px solid #000; text-align: left; vertical-align: top;}
+    .data-table th { background-color: #f9f9f9; font-weight: bold; }
+    
+    .declaration-box { border: 1px solid #000; padding: 10px; margin-top: 15px; page-break-inside: avoid;}
+    .signature-area { display: flex; justify-content: space-between; margin-top: 30px; }
+    
+    @media print {
+        body { background: white; margin: 0; padding: 0; }
+        .form-container { display: none; } 
+        #a4-output { display: block; }     
+        @page { size: A4; margin: 5mm; } 
+    }
+</style>
+</head>
+<body>
+
+<div class="form-container" id="webForm">
+    <div class="company-header">
+        <h1>NIRMAL POLY PLAST PVT. LTD.</h1>
+        <h3>(Ahmedabad Plant)</h3>
+        <h3>KOLORR - RATAN</h3>
+        <p>Application Form</p>
+    </div>
+    
+    <form id="interviewForm">
+        <div class="grid-layout">
+            
+            <div class="section-title">A. Personal Information</div>
+            
+            <div class="form-group col-6"><label>Position Applied For</label><input type="text" id="position" required></div>
+            <div class="form-group col-6"><label>Upload Photograph</label><input type="file" id="photo" accept="image/*" required><img id="photoPreview"></div>
+            
+            <div class="form-group col-4"><label>Surname</label><input type="text" id="surname" required></div>
+            <div class="form-group col-4"><label>First Name</label><input type="text" id="fName" required></div>
+            <div class="form-group col-4"><label>Middle Name</label><input type="text" id="mName"></div>
+            
+            <div class="form-group col-4"><label>Father's Surname</label><input type="text" id="fatSurname" required></div>
+            <div class="form-group col-4"><label>Father's First Name</label><input type="text" id="fatFName" required></div>
+            <div class="form-group col-4"><label>Father's Middle Name</label><input type="text" id="fatMName"></div>
+
+            <div class="form-group col-3"><label>Date of Birth <span id="ageDisplay" class="age-badge"></span></label><input type="date" id="dob" required></div>
+            <div class="form-group col-3"><label>Place of Birth</label><input type="text" id="birthPlace"></div>
+            <div class="form-group col-2">
+                <label>Gender</label>
+                <select id="gender" required><option value="">Select...</option><option value="Male">Male (M)</option><option value="Female">Female (F)</option><option value="Transgender">Transgender (T)</option></select>
+            </div>
+            <div class="form-group col-2">
+                <label>Marital Status</label>
+                <select id="marital" required><option value="">Select...</option><option value="Single">Single</option><option value="Married">Married</option><option value="Divorced">Divorced</option></select>
+            </div>
+            <div class="form-group col-2"><label>Religion</label><input type="text" id="religion"></div>
+            
+            <div class="form-group col-3">
+                <label>Category</label>
+                <select id="category"><option value="Gen">General</option><option value="OBC">OBC</option><option value="SC">SC</option><option value="ST">ST</option></select>
+            </div>
+            <div class="form-group col-3"><label>Nationality</label><input type="text" id="nationality" value="Indian" required></div>
+            <div class="form-group col-3"><label>Mobile No.</label><input type="tel" id="phone" required></div>
+            <div class="form-group col-3"><label>Email Id</label><input type="email" id="email" required></div>
+
+            <div class="form-group col-6">
+                <label>Present Address</label>
+                <textarea id="currentAddress" rows="2" required></textarea>
+                <input type="text" id="currPin" placeholder="PIN Code" style="margin-top:5px; width: 40%;">
+            </div>
+            <div class="form-group col-6">
+                <label>Permanent Address</label>
+                <textarea id="permanentAddress" rows="2" required></textarea>
+                <input type="text" id="permPin" placeholder="PIN Code" style="margin-top:5px; width: 40%;">
+            </div>
+
+            <div class="form-group col-3"><label>Aadhaar No.</label><input type="text" id="aadhar" required></div>
+            <div class="form-group col-3"><label>PAN No.</label><input type="text" id="panCard" required></div>
+            <div class="form-group col-3"><label>PF/UAN No. (If Applicable)</label><input type="text" id="uan"></div>
+            <div class="form-group col-3"><label>ESIC Details (If Applicable)</label><input type="text" id="esic"></div>
+
+            <div class="form-group col-3"><label>Height (cm/ft)</label><input type="text" id="height"></div>
+            <div class="form-group col-3"><label>Weight (kg)</label><input type="text" id="weight"></div>
+            <div class="form-group col-3"><label>Blood Group</label><input type="text" id="bloodGrp"></div>
+            <div class="form-group col-3"><label>Identification Mark</label><input type="text" id="idMark"></div>
+
+            <div class="form-group col-6">
+                <label>Have you ever been convicted by a Court of Law? / Pending cases?</label>
+                <select id="hasLegal"><option value="No">No</option><option value="Yes">Yes</option></select>
+            </div>
+            <div class="form-group col-6"><label>If yes, provide details</label><input type="text" id="legalDetails"></div>
+
+            <div class="section-title">Family Details</div>
+            <div class="form-group col-12">
+                <table class="input-table">
+                    <tr><th>Relation</th><th>Name</th><th>D.O.B / Age</th><th>Occupation</th></tr>
+                    <tr><td>Father</td><td><input type="text" id="famFatherName"></td><td><input type="text" id="famFatherAge"></td><td><input type="text" id="famFatherOcc"></td></tr>
+                    <tr><td>Mother</td><td><input type="text" id="famMotherName"></td><td><input type="text" id="famMotherAge"></td><td><input type="text" id="famMotherOcc"></td></tr>
+                    <tr><td>Spouse</td><td><input type="text" id="famSpouseName"></td><td><input type="text" id="famSpouseAge"></td><td><input type="text" id="famSpouseOcc"></td></tr>
+                </table>
+            </div>
+
+            <div class="section-title">Language Proficiency</div>
+            <div class="form-group col-12"><label>Mother Language</label><input type="text" id="motherLang" style="width: 30%;"></div>
+            <div class="form-group col-12">
+                <table class="input-table">
+                    <tr><th>Language</th><th>Speak</th><th>Write</th><th>Read</th><th>Remarks (If Any)</th></tr>
+                    <tr><td>Gujarati</td>
+                        <td><select id="gujS"><option>Yes</option><option>No</option></select></td>
+                        <td><select id="gujW"><option>Yes</option><option>No</option></select></td>
+                        <td><select id="gujR"><option>Yes</option><option>No</option></select></td>
+                        <td><input type="text" id="gujRem"></td>
+                    </tr>
+                    <tr><td>Hindi</td>
+                        <td><select id="hinS"><option>Yes</option><option>No</option></select></td>
+                        <td><select id="hinW"><option>Yes</option><option>No</option></select></td>
+                        <td><select id="hinR"><option>Yes</option><option>No</option></select></td>
+                        <td><input type="text" id="hinRem"></td>
+                    </tr>
+                    <tr><td>English</td>
+                        <td><select id="engS"><option>Yes</option><option>No</option></select></td>
+                        <td><select id="engW"><option>Yes</option><option>No</option></select></td>
+                        <td><select id="engR"><option>Yes</option><option>No</option></select></td>
+                        <td><input type="text" id="engRem"></td>
+                    </tr>
+                    <tr><td>Other: <input type="text" id="othLangName" style="width: 50%; padding: 2px;"></td>
+                        <td><select id="othS"><option>No</option><option>Yes</option></select></td>
+                        <td><select id="othW"><option>No</option><option>Yes</option></select></td>
+                        <td><select id="othR"><option>No</option><option>Yes</option></select></td>
+                        <td><input type="text" id="othRem"></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="section-title">B. Education & Training Details</div>
+            <div class="form-group col-12">
+                <p style="font-size: 11px; margin:0 0 5px 0;">* FT = Full Time, PT = Part Time, DL = Distance Learning</p>
+                <table class="input-table">
+                    <tr><th>Degree / Diploma</th><th>School / University</th><th>FT/PT/DL</th><th>Duration</th><th>Passing Year</th><th>Principle Subjects</th><th>% / Grade</th></tr>
+                    <tr>
+                        <td>10th / S.S.C</td>
+                        <td><input type="text" id="edu10School" required></td>
+                        <td><select id="edu10Type"><option>FT</option><option>PT</option><option>DL</option></select></td>
+                        <td><input type="text" id="edu10Dur"></td>
+                        <td><input type="text" id="edu10Year" required></td>
+                        <td><input type="text" id="edu10Subj"></td>
+                        <td><input type="text" id="edu10Perc" required></td>
+                    </tr>
+                    <tr>
+                        <td>12th / H.S.C / Diploma</td>
+                        <td><input type="text" id="edu12School"></td>
+                        <td><select id="edu12Type"><option>FT</option><option>PT</option><option>DL</option></select></td>
+                        <td><input type="text" id="edu12Dur"></td>
+                        <td><input type="text" id="edu12Year"></td>
+                        <td><input type="text" id="edu12Subj"></td>
+                        <td><input type="text" id="edu12Perc"></td>
+                    </tr>
+                    <tr>
+                        <td>Graduation</td>
+                        <td><input type="text" id="eduGradSchool"></td>
+                        <td><select id="eduGradType"><option>FT</option><option>PT</option><option>DL</option></select></td>
+                        <td><input type="text" id="eduGradDur"></td>
+                        <td><input type="text" id="eduGradYear"></td>
+                        <td><input type="text" id="eduGradSubj"></td>
+                        <td><input type="text" id="eduGradPerc"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" id="eduPgName" placeholder="Post Grad / Other Degree" style="font-weight: bold;"></td>
+                        <td><input type="text" id="eduPgSchool"></td>
+                        <td><select id="eduPgType"><option>FT</option><option>PT</option><option>DL</option></select></td>
+                        <td><input type="text" id="eduPgDur"></td>
+                        <td><input type="text" id="eduPgYear"></td>
+                        <td><input type="text" id="eduPgSubj"></td>
+                        <td><input type="text" id="eduPgPerc"></td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="form-group col-12"><label>Specialized Training / Certifications</label>
+                <table class="input-table">
+                    <tr><th>Name of Training / Cert</th><th>Institute / Organization</th><th>Duration</th><th>Subjects</th></tr>
+                    <tr><td><input type="text" id="cert1Name"></td><td><input type="text" id="cert1Inst"></td><td><input type="text" id="cert1Dur"></td><td><input type="text" id="cert1Subj"></td></tr>
+                    <tr><td><input type="text" id="cert2Name"></td><td><input type="text" id="cert2Inst"></td><td><input type="text" id="cert2Dur"></td><td><input type="text" id="cert2Subj"></td></tr>
+                </table>
+            </div>
+
+            <div class="section-title">C. Employment History</div>
+            <div class="form-group col-12">
+                <table class="input-table">
+                    <tr><th>Name of Company</th><th>Duration (From - To)</th><th>Designation</th><th>Salary (CTC PA)</th><th>Reason for Leaving</th></tr>
+                    <tr>
+                        <td><input type="text" id="emp1Comp"></td>
+                        <td><input type="text" id="emp1Dur"></td>
+                        <td><input type="text" id="emp1Desig"></td>
+                        <td><input type="text" id="emp1Ctc"></td>
+                        <td><input type="text" id="emp1Leave"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" id="emp2Comp"></td>
+                        <td><input type="text" id="emp2Dur"></td>
+                        <td><input type="text" id="emp2Desig"></td>
+                        <td><input type="text" id="emp2Ctc"></td>
+                        <td><input type="text" id="emp2Leave"></td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="form-group col-12"><label>Present Job Responsibility</label><textarea id="jobResp" rows="2"></textarea></div>
+            
+            <div class="form-group col-6"><label>Who do you report to? (Designation/Title)</label><input type="text" id="reportTo"></div>
+            <div class="form-group col-6"><label>Who reports to you? (Team Size / Titles)</label><input type="text" id="reportBy"></div>
+
+            <div class="form-group col-6"><label>Key Strengths</label><textarea id="strengths" rows="2"></textarea></div>
+            <div class="form-group col-6"><label>Areas of Improvement</label><textarea id="improvements" rows="2"></textarea></div>
+
+            <div class="section-title">D. General Information & References</div>
+            
+            <div class="form-group col-4">
+                <label>Related to any Ratan Group employee?</label>
+                <select id="relRatan"><option value="No">No</option><option value="Yes">Yes</option></select>
+            </div>
+            <div class="form-group col-8"><label>If Yes (Name, Dept, Designation, Location)</label><input type="text" id="ratanDetails"></div>
+            
+            <div class="form-group col-4">
+                <label>Interviewed in our Organization in the past?</label>
+                <select id="pastInterview"><option value="No">No</option><option value="Yes">Yes</option></select>
+            </div>
+            <div class="form-group col-8"><label>If Yes, provide details</label><input type="text" id="pastIntDetails"></div>
+
+            <div class="form-group col-6"><label>Expected Salary (CTC Per Annum)</label><input type="text" id="expectedCtc" required></div>
+            <div class="form-group col-6"><label>Notice Period Required for Joining</label><input type="text" id="noticePeriod" required></div>
+            
+            <div class="form-group col-12"><label>References (At least two who are not friends/family)</label>
+                <table class="input-table">
+                    <tr><th>Name</th><th>Occupation</th><th>Contact No.</th><th>Address</th></tr>
+                    <tr>
+                        <td><input type="text" id="ref1Name"></td>
+                        <td><input type="text" id="ref1Occ"></td>
+                        <td><input type="text" id="ref1Phone"></td>
+                        <td><input type="text" id="ref1Addr"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" id="ref2Name"></td>
+                        <td><input type="text" id="ref2Occ"></td>
+                        <td><input type="text" id="ref2Phone"></td>
+                        <td><input type="text" id="ref2Addr"></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="form-group col-4"><label>Primary Bank Name</label><input type="text" id="bankName" required></div>
+            <div class="form-group col-4"><label>Bank Account Number</label><input type="text" id="bankAccNo" required></div>
+            <div class="form-group col-4"><label>Bank IFSC Code</label><input type="text" id="bankIfsc" required></div>
+            
+            <div class="form-group col-6"><label>Place (City for Declaration)</label><input type="text" id="declPlace" required></div>
+
+        </div>
+
+        <button type="submit" class="submit-btn">Compile & Generate Application PDF</button>
+    </form>
+</div>
+
+<div id="a4-output">
+    <div class="doc-header">
+        <h1>NIRMAL POLY PLAST PVT. LTD.</h1>
+        <h2>(Ahmedabad Plant)</h2>
+        <h2>KOLORR - RATAN</h2>
+        <p>APPLICATION FOR EMPLOYMENT</p>
+    </div>
+
+    <div class="profile-section">
+        <div class="applicant-basic-info" style="width: 75%;">
+            <h2 id="docFullName">NAME</h2>
+            <p><strong>Post Applied For:</strong> <span id="docPosition"></span></p>
+            <p><strong>Date:</strong> <span id="docDate"></span></p>
+            <p><strong>Mobile:</strong> <span id="docPhone"></span> &nbsp; | &nbsp; <strong>Email:</strong> <span id="docEmail"></span></p>
+        </div>
+        <img id="docPhoto" src="" alt="Photo">
+    </div>
+
+    <div class="print-section">
+        <div class="section-heading">A. Personal Information</div>
+        <table class="data-table">
+            <tr>
+                <th width="15%">Father's Name</th><td width="35%" id="docFather"></td>
+                <th width="15%">D.O.B & Age</th><td width="35%" id="docDob"></td>
+            </tr>
+            <tr>
+                <th>Place of Birth</th><td id="docBirthPlace"></td>
+                <th>Gender</th><td id="docGender"></td>
+            </tr>
+            <tr>
+                <th>Marital Status</th><td id="docMarital"></td>
+                <th>Religion / Category</th><td><span id="docReligion"></span> / <span id="docCategory"></span></td>
+            </tr>
+            <tr>
+                <th>Nationality</th><td id="docNationality"></td>
+                <th>Mother Lang.</th><td id="docMotherLang"></td>
+            </tr>
+            <tr>
+                <th>Present Address</th><td colspan="3"><span id="docCurAdd"></span> - Pin: <span id="docCurPin"></span></td>
+            </tr>
+            <tr>
+                <th>Perm. Address</th><td colspan="3"><span id="docPermAdd"></span> - Pin: <span id="docPermPin"></span></td>
+            </tr>
+        </table>
+        
+        <table class="data-table" style="border-top: none;">
+            <tr>
+                <th width="12%">Aadhaar No.</th><td width="21%" id="docAadhar"></td>
+                <th width="12%">PAN No.</th><td width="21%" id="docPan"></td>
+                <th width="13%">PF/UAN No.</th><td width="21%" id="docUan"></td>
+            </tr>
+            <tr>
+                <th>ESIC Details</th><td id="docEsic"></td>
+                <th>Height / Weight</th><td><span id="docHeight"></span> / <span id="docWeight"></span></td>
+                <th>Blood Grp / ID</th><td><span id="docBlood"></span> | <span id="docIdMark"></span></td>
+            </tr>
+            <tr>
+                <th>Legal Cases?</th><td colspan="5"><span id="docLegal"></span> - Details: <span id="docLegalDet"></span></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="print-section">
+        <div class="section-heading">Family Details</div>
+        <table class="data-table">
+            <tr><th>Relation</th><th>Name</th><th>D.O.B / Age</th><th>Occupation</th></tr>
+            <tr><td>Father</td><td id="dfName"></td><td id="dfAge"></td><td id="dfOcc"></td></tr>
+            <tr><td>Mother</td><td id="dmName"></td><td id="dmAge"></td><td id="dmOcc"></td></tr>
+            <tr><td>Spouse</td><td id="dsName"></td><td id="dsAge"></td><td id="dsOcc"></td></tr>
+        </table>
+    </div>
+
+    <div class="print-section">
+        <div class="section-heading">Language Proficiency</div>
+        <table class="data-table text-center">
+            <tr><th width="20%">Language</th><th width="15%">Speak</th><th width="15%">Write</th><th width="15%">Read</th><th>Remarks</th></tr>
+            <tr><td>Gujarati</td><td id="lGujS"></td><td id="lGujW"></td><td id="lGujR"></td><td id="lGujRem"></td></tr>
+            <tr><td>Hindi</td><td id="lHinS"></td><td id="lHinW"></td><td id="lHinR"></td><td id="lHinRem"></td></tr>
+            <tr><td>English</td><td id="lEngS"></td><td id="lEngW"></td><td id="lEngR"></td><td id="lEngRem"></td></tr>
+            <tr><td><span id="lOthName">Other</span></td><td id="lOthS"></td><td id="lOthW"></td><td id="lOthR"></td><td id="lOthRem"></td></tr>
+        </table>
+    </div>
+
+    <div class="print-section">
+        <div class="section-heading">B. Education & Training Details</div>
+        <table class="data-table">
+            <tr><th>Degree/Diploma</th><th>School/University</th><th>Type</th><th>Duration</th><th>Pass Yr</th><th>Subjects</th><th>%</th></tr>
+            <tr><td>10th/SSC</td><td id="e10Sch"></td><td id="e10Ty"></td><td id="e10Du"></td><td id="e10Yr"></td><td id="e10Su"></td><td id="e10Pe"></td></tr>
+            <tr><td>12th/Dip</td><td id="e12Sch"></td><td id="e12Ty"></td><td id="e12Du"></td><td id="e12Yr"></td><td id="e12Su"></td><td id="e12Pe"></td></tr>
+            <tr><td>Graduation</td><td id="eGrSch"></td><td id="eGrTy"></td><td id="eGrDu"></td><td id="eGrYr"></td><td id="eGrSu"></td><td id="eGrPe"></td></tr>
+            <tr><td id="ePgNameOut">Post Grad</td><td id="ePgSch"></td><td id="ePgTy"></td><td id="ePgDu"></td><td id="ePgYr"></td><td id="ePgSu"></td><td id="ePgPe"></td></tr>
+        </table>
+        <table class="data-table" style="border-top:none;">
+            <tr><th width="25%">Training / Certifications</th><td id="docCerts"></td></tr>
+        </table>
+    </div>
+
+    <div class="print-section">
+        <div class="section-heading">C. Employment History & Organization</div>
+        <table class="data-table">
+            <tr><th>Company Name</th><th>Duration</th><th>Designation</th><th>CTC PA</th><th>Reason for Leaving</th></tr>
+            <tr><td id="emp1C"></td><td id="emp1D"></td><td id="emp1Des"></td><td id="emp1S"></td><td id="emp1R"></td></tr>
+            <tr><td id="emp2C"></td><td id="emp2D"></td><td id="emp2Des"></td><td id="emp2S"></td><td id="emp2R"></td></tr>
+        </table>
+        <table class="data-table" style="border-top:none;">
+            <tr><th width="20%">Job Responsibility</th><td colspan="3" id="docJobResp"></td></tr>
+            <tr>
+                <th width="20%">Reports To</th><td width="30%" id="docRepTo"></td>
+                <th width="20%">Reported By</th><td width="30%" id="docRepBy"></td>
+            </tr>
+            <tr>
+                <th>Key Strengths</th><td id="docStr"></td>
+                <th>Improvements</th><td id="docImp"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="print-section">
+        <div class="section-heading">D. General Information, References & Bank Details</div>
+        <table class="data-table">
+            <tr>
+                <th width="25%">Related to Ratan Group?</th><td width="25%"><span id="docRatan"></span></td>
+                <th width="15%">Details</th><td width="35%" id="docRatanDet"></td>
+            </tr>
+            <tr>
+                <th>Past Interview?</th><td><span id="docPastInt"></span></td>
+                <th>Details</th><td id="docPastIntDet"></td>
+            </tr>
+            <tr>
+                <th>Expected Salary (CTC)</th><td><span id="docExpCtc"></span></td>
+                <th>Notice Period</th><td><span id="docNotice"></span></td>
+            </tr>
+        </table>
+        <table class="data-table" style="border-top:none;">
+            <tr><th width="15%">Reference 1</th><td id="docRef1"></td></tr>
+            <tr><th>Reference 2</th><td id="docRef2"></td></tr>
+            <tr><th>Bank Info</th><td>Name: <span id="docBankName"></span> | A/C No: <span id="docBankAccNo"></span> | IFSC: <span id="docBankIfsc"></span></td></tr>
+        </table>
+    </div>
+
+    <div class="print-section declaration-box">
+        <p style="margin-top:0; font-weight: bold; text-decoration: underline;">DECLARATION</p>
+        <p style="text-align: justify; line-height: 1.4; font-size: 9px;">I hereby declare that the information & details furnished herein are true and correct to the best of my knowledge and belief, if any information is found to be suppressed, misrepresented or false, i shall responsible for the consequences and shall render myself liable to disciplinary action including termination of services with our any compensation and notice.</p>
+        
+        <div class="signature-area">
+            <div>
+                <p><strong>Date:</strong> <span id="printSignDate"></span></p>
+                <p><strong>Place:</strong> <span id="printSignPlace"></span></p>
+            </div>
+            <div style="text-align: center; margin-right: 50px;">
+                <p>___________________________________</p>
+                <p><strong>Signature of Applicant</strong></p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="print-section" style="margin-top: 10px; border: 2px solid #000; padding: 10px; background-color: #f9f9f9;">
+        <p style="font-weight: bold; margin-top: 0; font-size: 12px; text-decoration: underline;">HR / INTERVIEWER USE ONLY</p>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 11px;">
+            <span><strong>Shortlisted:</strong> [ ] Yes &nbsp;&nbsp; [ ] No</span>
+            <span><strong>Interview Round:</strong> _________________</span>
+            <span><strong>Interviewer Sign:</strong> _________________</span>
+        </div>
+        <p style="font-weight: bold; margin-bottom: 3px; font-size: 11px;">Overall Comments:</p>
+        <div style="height: 100px; border: 1px solid #ccc; background-color: #fff;"></div>
+    </div>
+</div>
+
+<script>
+    const sysDate = new Date().toLocaleDateString();
+    document.getElementById('docDate').innerText = sysDate;
+    document.getElementById('printSignDate').innerText = sysDate;
+
+    // Age Calculator
+    document.getElementById('dob').addEventListener('change', function() {
+        if (this.value) {
+            const dob = new Date(this.value);
+            const today = new Date();
+            let age = today.getFullYear() - dob.getFullYear();
+            if (today.getMonth() - dob.getMonth() < 0 || (today.getMonth() === dob.getMonth() && today.getDate() < dob.getDate())) {
+                age--;
+            }
+            document.getElementById('ageDisplay').innerText = `(${age} Yrs)`;
+            this.dataset.age = age; 
+        } else {
+            document.getElementById('ageDisplay').innerText = '';
+            this.dataset.age = '';
+        }
+    });
+
+    // Photo
+    document.getElementById('photo').addEventListener('change', function(e) {
+        if (e.target.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                document.getElementById('photoPreview').src = ev.target.result;
+                document.getElementById('photoPreview').style.display = 'block';
+                document.getElementById('docPhoto').src = ev.target.result;
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        }
+    });
+
+    // Submit -> PDF Mapping & Dynamic Filename
+    document.getElementById('interviewForm').addEventListener('submit', function(e) {
+        e.preventDefault(); 
+
+        // Profile (Ordered: Surname, First Name, Middle Name based on PDF structure)
+        let surname = document.getElementById('surname').value;
+        let fName = document.getElementById('fName').value;
+        let mName = document.getElementById('mName').value;
+        let position = document.getElementById('position').value;
+        
+        document.getElementById('docFullName').innerText = `${surname} ${fName} ${mName}`.trim().toUpperCase();
+        document.getElementById('docPosition').innerText = position;
+        document.getElementById('docPhone').innerText = document.getElementById('phone').value;
+        document.getElementById('docEmail').innerText = document.getElementById('email').value;
+
+        // A. Personal (Father's name also ordered Surname, First, Middle)
+        let fatSurname = document.getElementById('fatSurname').value;
+        let fatFName = document.getElementById('fatFName').value;
+        let fatMName = document.getElementById('fatMName').value;
+        document.getElementById('docFather').innerText = `${fatSurname} ${fatFName} ${fatMName}`.trim().toUpperCase();
+        
+        let dobStr = document.getElementById('dob').value;
+        let calcAge = document.getElementById('dob').dataset.age;
+        document.getElementById('docDob').innerText = calcAge ? `${dobStr} (${calcAge} Yrs)` : dobStr;
+        
+        document.getElementById('docBirthPlace').innerText = document.getElementById('birthPlace').value;
+        document.getElementById('docGender').innerText = document.getElementById('gender').value;
+        document.getElementById('docMarital').innerText = document.getElementById('marital').value;
+        document.getElementById('docReligion').innerText = document.getElementById('religion').value;
+        document.getElementById('docCategory').innerText = document.getElementById('category').value;
+        document.getElementById('docNationality').innerText = document.getElementById('nationality').value;
+        document.getElementById('docMotherLang').innerText = document.getElementById('motherLang').value;
+        
+        document.getElementById('docCurAdd').innerText = document.getElementById('currentAddress').value;
+        document.getElementById('docCurPin').innerText = document.getElementById('currPin').value;
+        document.getElementById('docPermAdd').innerText = document.getElementById('permanentAddress').value;
+        document.getElementById('docPermPin').innerText = document.getElementById('permPin').value;
+        
+        document.getElementById('docAadhar').innerText = document.getElementById('aadhar').value;
+        document.getElementById('docPan').innerText = document.getElementById('panCard').value.toUpperCase();
+        document.getElementById('docUan').innerText = document.getElementById('uan').value || 'N/A';
+        document.getElementById('docEsic').innerText = document.getElementById('esic').value || 'N/A';
+        
+        document.getElementById('docHeight').innerText = document.getElementById('height').value;
+        document.getElementById('docWeight').innerText = document.getElementById('weight').value;
+        document.getElementById('docBlood').innerText = document.getElementById('bloodGrp').value;
+        document.getElementById('docIdMark').innerText = document.getElementById('idMark').value;
+        
+        document.getElementById('docLegal').innerText = document.getElementById('hasLegal').value;
+        document.getElementById('docLegalDet').innerText = document.getElementById('legalDetails').value || '-';
+
+        // Family
+        document.getElementById('dfName').innerText = document.getElementById('famFatherName').value;
+        document.getElementById('dfAge').innerText = document.getElementById('famFatherAge').value;
+        document.getElementById('dfOcc').innerText = document.getElementById('famFatherOcc').value;
+        document.getElementById('dmName').innerText = document.getElementById('famMotherName').value;
+        document.getElementById('dmAge').innerText = document.getElementById('famMotherAge').value;
+        document.getElementById('dmOcc').innerText = document.getElementById('famMotherOcc').value;
+        document.getElementById('dsName').innerText = document.getElementById('famSpouseName').value;
+        document.getElementById('dsAge').innerText = document.getElementById('famSpouseAge').value;
+        document.getElementById('dsOcc').innerText = document.getElementById('famSpouseOcc').value;
+
+        // Languages
+        document.getElementById('lGujS').innerText = document.getElementById('gujS').value;
+        document.getElementById('lGujW').innerText = document.getElementById('gujW').value;
+        document.getElementById('lGujR').innerText = document.getElementById('gujR').value;
+        document.getElementById('lGujRem').innerText = document.getElementById('gujRem').value;
+        
+        document.getElementById('lHinS').innerText = document.getElementById('hinS').value;
+        document.getElementById('lHinW').innerText = document.getElementById('hinW').value;
+        document.getElementById('lHinR').innerText = document.getElementById('hinR').value;
+        document.getElementById('lHinRem').innerText = document.getElementById('hinRem').value;
+        
+        document.getElementById('lEngS').innerText = document.getElementById('engS').value;
+        document.getElementById('lEngW').innerText = document.getElementById('engW').value;
+        document.getElementById('lEngR').innerText = document.getElementById('engR').value;
+        document.getElementById('lEngRem').innerText = document.getElementById('engRem').value;
+        
+        document.getElementById('lOthName').innerText = document.getElementById('othLangName').value || 'Other';
+        document.getElementById('lOthS').innerText = document.getElementById('othS').value;
+        document.getElementById('lOthW').innerText = document.getElementById('othW').value;
+        document.getElementById('lOthR').innerText = document.getElementById('othR').value;
+        document.getElementById('lOthRem').innerText = document.getElementById('othRem').value;
+
+        // Education
+        document.getElementById('e10Sch').innerText = document.getElementById('edu10School').value;
+        document.getElementById('e10Ty').innerText = document.getElementById('edu10Type').value;
+        document.getElementById('e10Du').innerText = document.getElementById('edu10Dur').value;
+        document.getElementById('e10Yr').innerText = document.getElementById('edu10Year').value;
+        document.getElementById('e10Su').innerText = document.getElementById('edu10Subj').value;
+        document.getElementById('e10Pe').innerText = document.getElementById('edu10Perc').value;
+
+        document.getElementById('e12Sch').innerText = document.getElementById('edu12School').value;
+        document.getElementById('e12Ty').innerText = document.getElementById('edu12Type').value;
+        document.getElementById('e12Du').innerText = document.getElementById('edu12Dur').value;
+        document.getElementById('e12Yr').innerText = document.getElementById('edu12Year').value;
+        document.getElementById('e12Su').innerText = document.getElementById('edu12Subj').value;
+        document.getElementById('e12Pe').innerText = document.getElementById('edu12Perc').value;
+
+        document.getElementById('eGrSch').innerText = document.getElementById('eduGradSchool').value;
+        document.getElementById('eGrTy').innerText = document.getElementById('eduGradType').value;
+        document.getElementById('eGrDu').innerText = document.getElementById('eduGradDur').value;
+        document.getElementById('eGrYr').innerText = document.getElementById('eduGradYear').value;
+        document.getElementById('eGrSu').innerText = document.getElementById('eduGradSubj').value;
+        document.getElementById('eGrPe').innerText = document.getElementById('eduGradPerc').value;
+
+        document.getElementById('ePgNameOut').innerText = document.getElementById('eduPgName').value || '-';
+        document.getElementById('ePgSch').innerText = document.getElementById('eduPgSchool').value;
+        document.getElementById('ePgTy').innerText = document.getElementById('eduPgType').value;
+        document.getElementById('ePgDu').innerText = document.getElementById('eduPgDur').value;
+        document.getElementById('ePgYr').innerText = document.getElementById('eduPgYear').value;
+        document.getElementById('ePgSu').innerText = document.getElementById('eduPgSubj').value;
+        document.getElementById('ePgPe').innerText = document.getElementById('eduPgPerc').value;
+
+        // Certifications
+        let c1 = document.getElementById('cert1Name').value ? `${document.getElementById('cert1Name').value} (${document.getElementById('cert1Inst').value}) - ${document.getElementById('cert1Dur').value}` : '';
+        let c2 = document.getElementById('cert2Name').value ? `<br>${document.getElementById('cert2Name').value} (${document.getElementById('cert2Inst').value}) - ${document.getElementById('cert2Dur').value}` : '';
+        document.getElementById('docCerts').innerHTML = (c1 || c2) ? c1 + c2 : '-';
+
+        // Employment
+        document.getElementById('emp1C').innerText = document.getElementById('emp1Comp').value;
+        document.getElementById('emp1D').innerText = document.getElementById('emp1Dur').value;
+        document.getElementById('emp1Des').innerText = document.getElementById('emp1Desig').value;
+        document.getElementById('emp1S').innerText = document.getElementById('emp1Ctc').value;
+        document.getElementById('emp1R').innerText = document.getElementById('emp1Leave').value;
+
+        document.getElementById('emp2C').innerText = document.getElementById('emp2Comp').value;
+        document.getElementById('emp2D').innerText = document.getElementById('emp2Dur').value;
+        document.getElementById('emp2Des').innerText = document.getElementById('emp2Desig').value;
+        document.getElementById('emp2S').innerText = document.getElementById('emp2Ctc').value;
+        document.getElementById('emp2R').innerText = document.getElementById('emp2Leave').value;
+
+        document.getElementById('docJobResp').innerText = document.getElementById('jobResp').value;
+        document.getElementById('docRepTo').innerText = document.getElementById('reportTo').value;
+        document.getElementById('docRepBy').innerText = document.getElementById('reportBy').value;
+        document.getElementById('docStr').innerText = document.getElementById('strengths').value;
+        document.getElementById('docImp').innerText = document.getElementById('improvements').value;
+
+        // General Info
+        document.getElementById('docRatan').innerText = document.getElementById('relRatan').value;
+        document.getElementById('docRatanDet').innerText = document.getElementById('ratanDetails').value || '-';
+        document.getElementById('docPastInt').innerText = document.getElementById('pastInterview').value;
+        document.getElementById('docPastIntDet').innerText = document.getElementById('pastIntDetails').value || '-';
+        
+        document.getElementById('docExpCtc').innerText = document.getElementById('expectedCtc').value;
+        document.getElementById('docNotice').innerText = document.getElementById('noticePeriod').value;
+
+        // References & Bank
+        let r1n = document.getElementById('ref1Name').value;
+        let r1o = document.getElementById('ref1Occ').value;
+        let r1p = document.getElementById('ref1Phone').value;
+        let r1a = document.getElementById('ref1Addr').value;
+        document.getElementById('docRef1').innerText = r1n ? `${r1n} (${r1o}) | Ph: ${r1p} | Addr: ${r1a}` : '-';
+
+        let r2n = document.getElementById('ref2Name').value;
+        let r2o = document.getElementById('ref2Occ').value;
+        let r2p = document.getElementById('ref2Phone').value;
+        let r2a = document.getElementById('ref2Addr').value;
+        document.getElementById('docRef2').innerText = r2n ? `${r2n} (${r2o}) | Ph: ${r2p} | Addr: ${r2a}` : '-';
+
+        document.getElementById('docBankName').innerText = document.getElementById('bankName').value;
+        document.getElementById('docBankAccNo').innerText = document.getElementById('bankAccNo').value;
+        document.getElementById('docBankIfsc').innerText = document.getElementById('bankIfsc').value.toUpperCase();
+
+        document.getElementById('printSignPlace').innerText = document.getElementById('declPlace').value;
+
+        // --- FILENAME LOGIC ---
+        // Save the original document title
+        const originalTitle = document.title;
+        
+        // Format: "First_Name Surname - Position"
+        const safeSurname = surname ? surname.trim() : "Candidate";
+        const safeFName = fName ? fName.trim() : "";
+        const safePosition = position ? position.trim() : "Application";
+        document.title = `${safeFName} ${safeSurname} - ${safePosition}`;
+
+        // Trigger the print dialog
+        window.print();
+
+        // Revert the document title back to the original after a short delay
+        setTimeout(() => {
+            document.title = originalTitle;
+        }, 100);
+    });
+</script>
+
+</body>
+</html>
